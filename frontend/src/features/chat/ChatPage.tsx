@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { ChatHeader } from './components/ChatHeader';
@@ -37,6 +36,7 @@ export const ChatPage = () => {
     new Map(),
   );
   const [isThinking, setIsThinking] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const chatsQuery = useQuery({
     queryKey: ['chats'],
@@ -221,26 +221,18 @@ export const ChatPage = () => {
   };
 
   return (
-    <div className="chat-layout">
+    <div className={`chat-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <ChatSidebar
         chats={chats}
         activeChatId={activeChatId}
         onSelect={setActiveChatId}
         onCreateChat={handleCreateChat}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        user={user}
+        onSignOut={handleSignOut}
       />
       <main className="chat-main">
-        <header className="chat-topbar">
-          <div>
-            <h3>{user?.display_name ?? 'Pet Lover'}</h3>
-            <span>{user?.email}</span>
-          </div>
-          <div className="chat-topbar-actions">
-            <Link to="/profile">Profile</Link>
-            <button type="button" onClick={handleSignOut}>
-              Sign out
-            </button>
-          </div>
-        </header>
 
         <ChatHeader chat={activeChat} onRename={handleRenameChat} onDelete={handleDeleteChat} />
 

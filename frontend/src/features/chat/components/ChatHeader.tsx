@@ -1,3 +1,5 @@
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { TooltipButton } from '../../../components/TooltipButton';
 import type { Chat } from '../../../types/api';
 
 type Props = {
@@ -18,12 +20,12 @@ export const ChatHeader = ({ chat, onDelete, onRename }: Props) => (
     </div>
     {chat ? (
       <div className="chat-header-actions">
-        <button type="button" onClick={onRename}>
-          Rename
-        </button>
-        <button type="button" onClick={onDelete} className="danger">
-          Delete
-        </button>
+        <TooltipButton tooltip="Rename" onClick={onRename}>
+          <FiEdit2 />
+        </TooltipButton>
+        <TooltipButton tooltip="Delete" onClick={onDelete} className="danger">
+          <FiTrash2 />
+        </TooltipButton>
       </div>
     ) : null}
   </div>
