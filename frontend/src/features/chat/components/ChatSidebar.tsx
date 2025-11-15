@@ -1,5 +1,7 @@
-import { FiUser, FiLogOut, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
-import { TooltipButton, TooltipLink } from '../../../components/TooltipButton';
+import { useState, useRef } from 'react';
+import { FiUser, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
+import { TooltipButton } from '../../../components/TooltipButton';
+import { ProfileMenu } from '../../../components/ProfileMenu';
 import type { Chat } from '../../../types/api';
 import type { User } from '../../../types/api';
 
@@ -23,8 +25,12 @@ export const ChatSidebar = ({
   onToggleCollapse,
   user,
   onSignOut,
-}: Props) => (
-  <aside className={`chat-sidebar ${collapsed ? 'collapsed' : ''}`}>
+}: Props) => {
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <aside className={`chat-sidebar ${collapsed ? 'collapsed' : ''}`}>
     <div className="chat-sidebar-header">
       {!collapsed && <h2>Chats</h2>}
       <div className="chat-sidebar-header-actions">
@@ -70,35 +76,52 @@ export const ChatSidebar = ({
         )}
       </div>
     )}
-    <div className="chat-sidebar-footer">
-      {collapsed ? (
-        <>
-          <TooltipLink to="/profile" tooltip="Profile">
-            <FiUser />
-          </TooltipLink>
-          <TooltipButton tooltip="Sign out" onClick={onSignOut} className="sidebar-logout-btn">
-            <FiLogOut />
-          </TooltipButton>
-        </>
-      ) : (
-        <>
-          <div className="chat-sidebar-profile">
-            <div className="chat-sidebar-profile-info">
-              <h3>{user?.display_name ?? 'Pet Lover'}</h3>
-              <span>{user?.email}</span>
+      <div className="chat-sidebar-footer">
+        {collapsed ? (
+          <>
+            <TooltipButton
+              ref={profileButtonRef}
+              tooltip="Profile"
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="sidebar-profile-btn"
+            >
+              <FiUser />
+            </TooltipButton>
+            <ProfileMenu
+              isOpen={isProfileMenuOpen}
+              onClose={() => setIsProfileMenuOpen(false)}
+              onSignOut={onSignOut}
+              buttonRef={profileButtonRef}
+            />
+          </>
+        ) : (
+          <>
+            <div className="chat-sidebar-profile">
+              <div className="chat-sidebar-profile-info">
+                <h3>{user?.display_name ?? 'Pet Lover'}</h3>
+                <span>{user?.email}</span>
+              </div>
+              <div className="chat-sidebar-profile-actions">
+                <TooltipButton
+                  ref={profileButtonRef}
+                  tooltip="Profile"
+                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                  className="sidebar-profile-btn"
+                >
+                  <FiUser />
+                </TooltipButton>
+                <ProfileMenu
+                  isOpen={isProfileMenuOpen}
+                  onClose={() => setIsProfileMenuOpen(false)}
+                  onSignOut={onSignOut}
+                  buttonRef={profileButtonRef}
+                />
+              </div>
             </div>
-            <div className="chat-sidebar-profile-actions">
-              <TooltipLink to="/profile" tooltip="Profile">
-                <FiUser />
-              </TooltipLink>
-              <TooltipButton tooltip="Sign out" onClick={onSignOut} className="sidebar-logout-btn">
-                <FiLogOut />
-              </TooltipButton>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  </aside>
-);
+          </>
+        )}
+      </div>
+    </aside>
+  );
+};
 

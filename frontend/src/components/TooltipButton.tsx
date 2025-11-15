@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { useTooltip } from '../hooks/useTooltip';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
@@ -7,19 +8,18 @@ type TooltipButtonProps = {
   tooltip?: string;
   className?: string;
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
-  [key: string]: unknown;
-};
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type' | 'className'>;
 
-export const TooltipButton = ({
+export const TooltipButton = forwardRef<HTMLButtonElement, TooltipButtonProps>(({
   tooltip,
   className = '',
   children,
   onClick,
   type = 'button',
   ...props
-}: TooltipButtonProps) => {
+}, ref) => {
   const {
     buttonRef,
     tooltipRef,
@@ -33,10 +33,21 @@ export const TooltipButton = ({
 
   const buttonClassName = `tooltip-button ${className}`.trim();
 
+  const combinedRef = (node: HTMLButtonElement | null) => {
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+    if (buttonRef) {
+      (buttonRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+    }
+  };
+
   return (
     <>
       <button
-        ref={buttonRef as React.RefObject<HTMLButtonElement>}
+        ref={combinedRef}
         type={type}
         className={buttonClassName}
         onMouseEnter={showTooltip}
@@ -69,7 +80,16 @@ export const TooltipButton = ({
         )}
     </>
   );
-};
+});
+
+TooltipButton.displayName = 'TooltipButton';
+
+type TooltipLinkProps = {
+  tooltip?: string;
+  className?: string;
+  children: ReactNode;
+  to: string;
+} & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick' | 'className' | 'href'>;
 
 export const TooltipLink = ({
   tooltip,
@@ -77,7 +97,7 @@ export const TooltipLink = ({
   children,
   to,
   ...props
-}: TooltipButtonProps & { to: string }) => {
+}: TooltipLinkProps) => {
   const {
     buttonRef,
     tooltipRef,

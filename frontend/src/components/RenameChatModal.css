@@ -1,0 +1,100 @@
+.rename-chat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rename-chat-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rename-chat-input-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.rename-chat-input-group input {
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.rename-chat-input-group input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.rename-chat-input-group input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rename-chat-input-group input::placeholder {
+  color: var(--text-secondary);
+}
+
+.rename-chat-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.rename-chat-button {
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  color: var(--text-primary);
+}
+
+.rename-chat-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.rename-chat-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.rename-chat-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rename-chat-button-cancel {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rename-chat-button-cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rename-chat-button-confirm {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.rename-chat-button-confirm:hover:not(:disabled) {
+  background: #7c6ef5;
+  border-color: #7c6ef5;
+}
+
