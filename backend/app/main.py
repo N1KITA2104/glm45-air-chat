@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from .config import get_settings
 from .database import dispose_engine, get_engine, init_engine
@@ -40,6 +41,10 @@ def create_app() -> FastAPI:
     application.include_router(auth.router, prefix="/auth", tags=["auth"])
     application.include_router(profile.router, prefix="/profile", tags=["profile"])
     application.include_router(chats.router, prefix="/chats", tags=["chats"])
+
+    @application.get("/", include_in_schema=False)
+    async def swagger_redirect() -> RedirectResponse:
+        return RedirectResponse(url="/docs")
 
     return application
 

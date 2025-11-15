@@ -26,7 +26,7 @@ class Settings(BaseSettings):
         alias="OPEN_ROUTER_API_KEY",
         description="OpenRouter API key",
     )
-    openrouter_model: str = Field(default="z-ai/glm-4.5-air")
+    openrouter_model: str = Field(default="z-ai/glm-4.5-air:free")
     openrouter_temperature: float = Field(default=0.7)
     openrouter_max_history: int = Field(default=15)
     debug_sql: bool = Field(default=False)

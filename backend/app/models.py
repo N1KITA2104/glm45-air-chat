@@ -61,7 +61,7 @@ class Chat(TimestampMixin, Base):
     )
     title: Mapped[str] = mapped_column(String(255), default="New Chat", nullable=False)
     model_name: Mapped[str] = mapped_column(
-        String(100), default="z-ai/glm-4.5-air", nullable=False
+        String(100), default="z-ai/glm-4.5-air:free", nullable=False
     )
 
     user: Mapped[User] = relationship(back_populates="chats")
