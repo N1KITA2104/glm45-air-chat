@@ -40,7 +40,14 @@ export const ChatPage = () => {
     new Map(),
   );
   const [isThinking, setIsThinking] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebarCollapsed');
+    return saved === 'true';
+  });
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem('sidebarWidth');
+    return saved ? parseInt(saved, 10) : 300;
+  });
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteChatModalOpen, setIsDeleteChatModalOpen] = useState(false);
   const [isRenameChatModalOpen, setIsRenameChatModalOpen] = useState(false);
@@ -178,6 +185,14 @@ export const ChatPage = () => {
     }
   }, [activeChatId, chats]);
 
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', String(sidebarCollapsed));
+  }, [sidebarCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem('sidebarWidth', String(sidebarWidth));
+  }, [sidebarWidth]);
+
 
   const handleCreateChat = () => {
     createChatMutation.mutate({});
@@ -269,14 +284,23 @@ export const ChatPage = () => {
   };
 
   return (
-    <div className={`chat-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+    <div 
+      className={`chat-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}
+      style={{
+        '--sidebar-width': sidebarCollapsed ? '60px' : `${sidebarWidth}px`,
+      } as React.CSSProperties}
+    >
       <ChatSidebar
         chats={chats}
         activeChatId={activeChatId}
         onSelect={setActiveChatId}
         onCreateChat={handleCreateChat}
         collapsed={sidebarCollapsed}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        onToggleCollapse={() => {
+          setSidebarCollapsed(!sidebarCollapsed);
+        }}
+        width={sidebarWidth}
+        onWidthChange={setSidebarWidth}
         user={user}
         onSignOut={handleSignOutClick}
       />
