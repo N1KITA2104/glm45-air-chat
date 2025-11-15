@@ -1,2 +1,43 @@
 """Authentication helpers and security utilities."""
 
+from __future__ import annotations
+
+from datetime import datetime, timedelta, timezone
+from typing import Any
+
+from jose import jwt
+from passlib.context import CryptContext
+
+from .config import Settings
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+ALGORITHM = "HS256"
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Return True when the plain password matches the stored hash."""
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password: str) -> str:
+    """Hash a plain password using bcrypt."""
+    return pwd_context.hash(password)
+
+
+def create_access_token(
+    subject: str,
+    settings: Settings,
+    expires_delta: timedelta | None = None,
+    additional_claims: dict[str, Any] | None = None,
+) -> str:
+    """Create a signed JWT access token for the given subject."""
+    to_encode: dict[str, Any] = additional_claims.copy() if additional_claims else {}
+
+    expire = datetime.now(timezone.utc) + (
+        expires_delta
+        if expires_delta
+        else timedelta(minutes=settings.access_token_expire_minutes)
+    )
+    to_encode.update({"sub": subject, "exp": expire})
+    return jwt.encode(to_encode, settings.secret_key, algorithm=ALGORITHM)
+
