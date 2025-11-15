@@ -19,12 +19,24 @@ import type { Chat } from '../../types/api';
 import '../../styles/chat.css';
 import { useAuthActions } from '../../services/auth';
 
+type OptimisticMessage = {
+  id: string;
+  content: string;
+  role: 'user';
+  created_at: string;
+  isOptimistic: true;
+};
+
 export const ChatPage = () => {
   const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
   const { logout } = useAuthActions();
 
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const [optimisticMessages, setOptimisticMessages] = useState<Map<string, OptimisticMessage[]>>(
+    new Map(),
+  );
+  const [isThinking, setIsThinking] = useState(false);
 
   const chatsQuery = useQuery({
     queryKey: ['chats'],
@@ -42,7 +54,7 @@ export const ChatPage = () => {
   const messagesQuery = useQuery({
     queryKey: ['messages', activeChatQueryId],
     queryFn: () => fetchMessages(activeChatQueryId!),
-    enabled: Boolean(activeChatQueryId),
+    enabled: Boolean(activeChatQueryId) && Boolean(activeChat),
     refetchInterval: 0,
     retry: false,
     refetchOnWindowFocus: false,
@@ -52,7 +64,9 @@ export const ChatPage = () => {
   const createChatMutation = useMutation({
     mutationFn: createChat,
     onSuccess: (newChat) => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
+      queryClient.setQueryData(['chats'], (oldChats: Chat[] | undefined) => {
+        return oldChats ? [...oldChats, newChat] : [newChat];
+      });
       setActiveChatId(newChat.id);
     },
   });
@@ -71,18 +85,52 @@ export const ChatPage = () => {
   const deleteChatMutation = useMutation({
     mutationFn: deleteChat,
     onSuccess: (_, deletedId) => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
+      queryClient.setQueryData(['chats'], (oldChats: Chat[] | undefined) => {
+        return oldChats ? oldChats.filter((chat) => chat.id !== deletedId) : [];
+      });
       queryClient.removeQueries({ queryKey: ['messages', deletedId], exact: true });
-      setActiveChatId((current) => (current === deletedId ? null : current));
+      setOptimisticMessages((prev) => {
+        const newMap = new Map(prev);
+        newMap.delete(deletedId);
+        return newMap;
+      });
+      setActiveChatId((current) => {
+        if (current === deletedId) {
+          return null;
+        }
+        return current;
+      });
     },
   });
 
   const sendMessageMutation = useMutation({
     mutationFn: ({ chatId, content }: { chatId: string; content: string }) =>
       sendMessage(chatId, { content }),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['messages', variables.chatId] });
+    onSuccess: async (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['chats'] });
+      await queryClient.refetchQueries({ queryKey: ['messages', variables.chatId] });
+      setOptimisticMessages((prev) => {
+        const newMap = new Map(prev);
+        const chatMessages = newMap.get(variables.chatId) || [];
+        newMap.set(
+          variables.chatId,
+          chatMessages.filter((msg) => msg.content !== variables.content),
+        );
+        return newMap;
+      });
+      setIsThinking(false);
+    },
+    onError: (_, variables) => {
+      setOptimisticMessages((prev) => {
+        const newMap = new Map(prev);
+        const chatMessages = newMap.get(variables.chatId) || [];
+        newMap.set(
+          variables.chatId,
+          chatMessages.filter((msg) => msg.content !== variables.content),
+        );
+        return newMap;
+      });
+      setIsThinking(false);
     },
   });
 
@@ -96,9 +144,13 @@ export const ChatPage = () => {
 
     const exists = activeChatId ? chats.some((chat) => chat.id === activeChatId) : false;
     if (!activeChatId || !exists) {
-      setActiveChatId(chats[0].id);
+      const firstChat = chats[0];
+      if (firstChat) {
+        setActiveChatId(firstChat.id);
+      }
     }
   }, [activeChatId, chats]);
+
 
   const handleCreateChat = () => {
     createChatMutation.mutate({});
@@ -119,17 +171,47 @@ export const ChatPage = () => {
   };
 
   const handleSendMessage = async (content: string) => {
+    let targetChatId = activeChatId;
     try {
+      const optimisticId = `optimistic-${Date.now()}-${Math.random()}`;
+      const optimisticMessage: OptimisticMessage = {
+        id: optimisticId,
+        content,
+        role: 'user',
+        created_at: new Date().toISOString(),
+        isOptimistic: true,
+      };
+
       if (!activeChatId) {
         const newChat = await createChatMutation.mutateAsync({});
+        targetChatId = newChat.id;
         setActiveChatId(newChat.id);
-        await sendMessageMutation.mutateAsync({ chatId: newChat.id, content });
-        return;
       }
-      await sendMessageMutation.mutateAsync({ chatId: activeChatId, content });
+
+      setOptimisticMessages((prev) => {
+        const newMap = new Map(prev);
+        const chatMessages = newMap.get(targetChatId!) || [];
+        newMap.set(targetChatId!, [...chatMessages, optimisticMessage]);
+        return newMap;
+      });
+      setIsThinking(true);
+
+      await sendMessageMutation.mutateAsync({ chatId: targetChatId!, content });
     } catch (error) {
       console.error(error);
       window.alert('Failed to send message. Please try again.');
+      setIsThinking(false);
+      if (targetChatId) {
+        setOptimisticMessages((prev) => {
+          const newMap = new Map(prev);
+          const chatMessages = newMap.get(targetChatId!) || [];
+          newMap.set(
+            targetChatId!,
+            chatMessages.filter((msg) => msg.content !== content),
+          );
+          return newMap;
+        });
+      }
     }
   };
 
@@ -166,6 +248,8 @@ export const ChatPage = () => {
           <ChatMessageList
             messages={messagesQuery.data}
             isLoading={messagesQuery.isLoading || messagesQuery.isFetching}
+            optimisticMessages={activeChatId ? optimisticMessages.get(activeChatId) || [] : []}
+            isThinking={isThinking}
           />
         </section>
 

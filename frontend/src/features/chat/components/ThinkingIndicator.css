@@ -1,0 +1,89 @@
+.thinking-indicator {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  max-width: 760px;
+  align-self: flex-start;
+  animation: thinking-pulse 2s ease-in-out infinite;
+}
+
+@keyframes thinking-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.thinking-avatar {
+  font-size: 24px;
+  animation: thinking-bounce 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes thinking-bounce {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(10deg) scale(1.1);
+  }
+}
+
+.thinking-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.thinking-text {
+  font-weight: 500;
+}
+
+.thinking-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.thinking-dots .dot {
+  display: inline-block;
+  animation: thinking-dot 1.4s ease-in-out infinite;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.thinking-dots .dot-1 {
+  animation-delay: 0s;
+}
+
+.thinking-dots .dot-2 {
+  animation-delay: 0.2s;
+}
+
+.thinking-dots .dot-3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes thinking-dot {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
