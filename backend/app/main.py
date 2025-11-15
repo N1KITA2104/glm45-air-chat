@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -13,7 +15,19 @@ from .routers import auth, chats, profile
 def create_app() -> FastAPI:
     """Application factory used for tests and runtime."""
     settings = get_settings()
-    application = FastAPI(title=settings.app_name)
+
+    @asynccontextmanager
+    async def lifespan(application: FastAPI):
+        await init_engine(settings)
+        engine = get_engine()
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        try:
+            yield
+        finally:
+            await dispose_engine()
+
+    application = FastAPI(title=settings.app_name, lifespan=lifespan)
 
     application.add_middleware(
         CORSMiddleware,
@@ -22,17 +36,6 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    @application.on_event("startup")
-    async def _startup() -> None:
-        await init_engine(settings)
-        engine = get_engine()
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-
-    @application.on_event("shutdown")
-    async def _shutdown() -> None:
-        await dispose_engine()
 
     @application.get("/health")
     async def health_check() -> dict[str, str]:
