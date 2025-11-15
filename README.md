@@ -1,8 +1,8 @@
 # Pet AI Chat Platform
 
-This repository contains a full-stack chat application that integrates Z.AI’s **GLM 4.5 Air** model via the OpenRouter API. It delivers a contextual chat experience with FastAPI + PostgreSQL on the backend and a React (Vite) frontend powered by `llm-ui` for smooth LLM output rendering.
+This repository contains a full-stack chat application that integrates Z.AI’s **GLM 4.5 Air Free** model via the OpenRouter API. It delivers a contextual chat experience with FastAPI + PostgreSQL on the backend and a React (Vite) frontend powered by `llm-ui` for smooth LLM output rendering.
 
-> 💡 Default model: [`z-ai/glm-4.5-air`](https://openrouter.ai/z-ai/glm-4.5-air/api?utm_source=openai)
+> 💡 Default model: [`z-ai/glm-4.5-air:free`](https://openrouter.ai/z-ai/glm-4.5-air/api?utm_source=openai)
 
 ---
 
@@ -10,7 +10,7 @@ This repository contains a full-stack chat application that integrates Z.AI’s 
 
 - 🔐 JWT authentication with registration, login, and profile editing
 - 💬 Chat management (create, rename, delete) with contextual memory
-- 🧠 OpenRouter integration for GLM 4.5 Air responses
+- 🧠 OpenRouter integration for GLM 4.5 Air Free responses
 - 🧩 `llm-ui` rendering for markdown/code-friendly assistant replies
 - 📱 Responsive React UI with chat sidebar, history, and streaming-friendly output
 - 🧪 Basic health-check test suite for the FastAPI service
@@ -22,7 +22,7 @@ This repository contains a full-stack chat application that integrates Z.AI’s 
 - **Node.js** ≥ 18
 - **Python** ≥ 3.11
 - **PostgreSQL** ≥ 14
-- OpenRouter account + API key (model: GLM 4.5 Air)
+- OpenRouter account + API key (model: GLM 4.5 Air Free)
 
 ---
 
