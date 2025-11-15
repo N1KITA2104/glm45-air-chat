@@ -125,7 +125,7 @@ export const ChatSidebar = ({
           <>
             <TooltipButton
               ref={profileButtonRef}
-              tooltip="Profile"
+              tooltip={isProfileMenuOpen ? undefined : "Profile"}
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
               className="sidebar-profile-btn"
             >
@@ -148,7 +148,7 @@ export const ChatSidebar = ({
               <div className="chat-sidebar-profile-actions">
                 <TooltipButton
                   ref={profileButtonRef}
-                  tooltip="Profile"
+                  tooltip={isProfileMenuOpen ? undefined : "Profile"}
                   onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                   className="sidebar-profile-btn"
                 >
