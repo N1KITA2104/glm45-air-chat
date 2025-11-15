@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { ChatHeader } from './components/ChatHeader';
@@ -18,6 +17,10 @@ import { useAuthStore } from '../../store/authStore';
 import type { Chat } from '../../types/api';
 import '../../styles/chat.css';
 import { useAuthActions } from '../../services/auth';
+import { ConfirmationModal } from '../../components/ConfirmationModal';
+import { RenameChatModal } from '../../components/RenameChatModal';
+import { Toast } from '../../components/Toast';
+import { useToast } from '../../hooks/useToast';
 
 type OptimisticMessage = {
   id: string;
@@ -37,6 +40,19 @@ export const ChatPage = () => {
     new Map(),
   );
   const [isThinking, setIsThinking] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebarCollapsed');
+    return saved === 'true';
+  });
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem('sidebarWidth');
+    return saved ? parseInt(saved, 10) : 300;
+  });
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isDeleteChatModalOpen, setIsDeleteChatModalOpen] = useState(false);
+  const [isRenameChatModalOpen, setIsRenameChatModalOpen] = useState(false);
+  const [chatToDelete, setChatToDelete] = useState<string | null>(null);
+  const { toast, showToast, hideToast } = useToast();
 
   const chatsQuery = useQuery({
     queryKey: ['chats'],
@@ -68,6 +84,13 @@ export const ChatPage = () => {
         return oldChats ? [...oldChats, newChat] : [newChat];
       });
       setActiveChatId(newChat.id);
+      showToast('Chat created successfully', 'success');
+    },
+    onError: (error) => {
+      showToast(
+        error instanceof Error ? error.message : 'Failed to create chat. Please try again.',
+        'error'
+      );
     },
   });
 
@@ -79,6 +102,13 @@ export const ChatPage = () => {
       if (activeChatId) {
         queryClient.invalidateQueries({ queryKey: ['messages', activeChatId] });
       }
+      showToast('Chat renamed successfully', 'success');
+    },
+    onError: (error) => {
+      showToast(
+        error instanceof Error ? error.message : 'Failed to rename chat. Please try again.',
+        'error'
+      );
     },
   });
 
@@ -120,7 +150,7 @@ export const ChatPage = () => {
       });
       setIsThinking(false);
     },
-    onError: (_, variables) => {
+    onError: (error, variables) => {
       setOptimisticMessages((prev) => {
         const newMap = new Map(prev);
         const chatMessages = newMap.get(variables.chatId) || [];
@@ -131,6 +161,10 @@ export const ChatPage = () => {
         return newMap;
       });
       setIsThinking(false);
+      showToast(
+        error instanceof Error ? error.message : 'Failed to send message. Please try again.',
+        'error'
+      );
     },
   });
 
@@ -151,6 +185,14 @@ export const ChatPage = () => {
     }
   }, [activeChatId, chats]);
 
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', String(sidebarCollapsed));
+  }, [sidebarCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem('sidebarWidth', String(sidebarWidth));
+  }, [sidebarWidth]);
+
 
   const handleCreateChat = () => {
     createChatMutation.mutate({});
@@ -158,16 +200,33 @@ export const ChatPage = () => {
 
   const handleRenameChat = () => {
     if (!activeChat) return;
-    const nextTitle = window.prompt('Enter a new title for this chat', activeChat.title);
-    if (!nextTitle) return;
-    renameChatMutation.mutate({ chatId: activeChat.id, title: nextTitle });
+    setIsRenameChatModalOpen(true);
+  };
+
+  const handleRenameChatConfirm = (newTitle: string) => {
+    if (!activeChat) return;
+    renameChatMutation.mutate(
+      { chatId: activeChat.id, title: newTitle },
+      {
+        onSuccess: () => {
+          setIsRenameChatModalOpen(false);
+        },
+      }
+    );
   };
 
   const handleDeleteChat = () => {
     if (!activeChat) return;
-    const confirmed = window.confirm('Delete this chat? This cannot be undone.');
-    if (!confirmed) return;
-    deleteChatMutation.mutate(activeChat.id);
+    setChatToDelete(activeChat.id);
+    setIsDeleteChatModalOpen(true);
+  };
+
+  const handleDeleteChatConfirm = () => {
+    if (chatToDelete) {
+      deleteChatMutation.mutate(chatToDelete);
+      setIsDeleteChatModalOpen(false);
+      setChatToDelete(null);
+    }
   };
 
   const handleSendMessage = async (content: string) => {
@@ -199,7 +258,6 @@ export const ChatPage = () => {
       await sendMessageMutation.mutateAsync({ chatId: targetChatId!, content });
     } catch (error) {
       console.error(error);
-      window.alert('Failed to send message. Please try again.');
       setIsThinking(false);
       if (targetChatId) {
         setOptimisticMessages((prev) => {
@@ -215,32 +273,38 @@ export const ChatPage = () => {
     }
   };
 
-  const handleSignOut = () => {
+  const handleSignOutClick = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleSignOutConfirm = () => {
     logout();
     queryClient.clear();
+    setIsLogoutModalOpen(false);
   };
 
   return (
-    <div className="chat-layout">
+    <div 
+      className={`chat-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}
+      style={{
+        '--sidebar-width': sidebarCollapsed ? '60px' : `${sidebarWidth}px`,
+      } as React.CSSProperties}
+    >
       <ChatSidebar
         chats={chats}
         activeChatId={activeChatId}
         onSelect={setActiveChatId}
         onCreateChat={handleCreateChat}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => {
+          setSidebarCollapsed(!sidebarCollapsed);
+        }}
+        width={sidebarWidth}
+        onWidthChange={setSidebarWidth}
+        user={user}
+        onSignOut={handleSignOutClick}
       />
       <main className="chat-main">
-        <header className="chat-topbar">
-          <div>
-            <h3>{user?.display_name ?? 'Pet Lover'}</h3>
-            <span>{user?.email}</span>
-          </div>
-          <div className="chat-topbar-actions">
-            <Link to="/profile">Profile</Link>
-            <button type="button" onClick={handleSignOut}>
-              Sign out
-            </button>
-          </div>
-        </header>
 
         <ChatHeader chat={activeChat} onRename={handleRenameChat} onDelete={handleDeleteChat} />
 
@@ -258,6 +322,45 @@ export const ChatPage = () => {
           disabled={sendMessageMutation.isPending || createChatMutation.isPending}
         />
       </main>
+      <ConfirmationModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleSignOutConfirm}
+        title="Sign out"
+        message="Are you sure you want to sign out?"
+        confirmText="Sign out"
+        cancelText="Cancel"
+        variant="danger"
+      />
+      <ConfirmationModal
+        isOpen={isDeleteChatModalOpen}
+        onClose={() => {
+          setIsDeleteChatModalOpen(false);
+          setChatToDelete(null);
+        }}
+        onConfirm={handleDeleteChatConfirm}
+        title="Delete chat"
+        message="Are you sure you want to delete this chat? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={deleteChatMutation.isPending}
+      />
+      {activeChat && (
+        <RenameChatModal
+          isOpen={isRenameChatModalOpen}
+          onClose={() => setIsRenameChatModalOpen(false)}
+          onConfirm={handleRenameChatConfirm}
+          currentTitle={activeChat.title}
+          isLoading={renameChatMutation.isPending}
+        />
+      )}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

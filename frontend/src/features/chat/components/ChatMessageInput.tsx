@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { FormEvent, KeyboardEvent } from 'react';
+import { FiSend } from 'react-icons/fi';
 
 type Props = {
   onSend: (content: string) => Promise<void>;
@@ -38,20 +39,19 @@ export const ChatMessageInput = ({ onSend, disabled }: Props) => {
 
   return (
     <form className="chat-input" onSubmit={handleSubmit}>
-      <textarea
-        placeholder="Ask about your pet's health, diet, or mood…"
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        onKeyDown={handleKeyDown}
-        rows={3}
-        disabled={disabled}
-      />
-      {error ? <span className="chat-input-error">{error}</span> : null}
-      <div className="chat-input-actions">
-        <button type="submit" disabled={disabled}>
-          {disabled ? 'Thinking…' : 'Send'}
+      <div className="chat-input-container">
+        <textarea
+          placeholder="Ask about your pet's health, diet, or mood…"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+        />
+        <button type="submit" disabled={disabled} className="chat-input-send">
+          <FiSend />
         </button>
       </div>
+      {error ? <span className="chat-input-error">{error}</span> : null}
     </form>
   );
 };
