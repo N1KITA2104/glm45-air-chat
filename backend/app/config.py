@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
-    app_name: str = Field(default="Pet AI Model API", description="Display name")
+    app_name: str = Field(default="AI Chat Platform", description="Display name")
     database_url: str = Field(
         default="postgresql+asyncpg://postgres:postgres@localhost:5432/pet_ai_model",
         description="Database connection string",
@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     secret_key: str = Field(default="dev-secret-change-me", description="JWT secret")
     access_token_expire_minutes: int = Field(default=60)
     backend_cors_origins: list[str] = Field(
-        default_factory=lambda: ["http://localhost:5173"]
+        default_factory=lambda: ["http://localhost:5173", "http://localhost:4173"]
     )
     open_router_api_key: str | None = Field(
         default=None,
@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     debug_sql: bool = Field(default=False)
     system_prompt: str = Field(
         default=(
-            "You are an AI assistant helping users with their pet-related questions. "
+            "You are an AI assistant helping users with their questions. "
             "Provide concise, friendly, and informative answers."
         )
     )

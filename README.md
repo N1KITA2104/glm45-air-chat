@@ -1,6 +1,6 @@
-# Pet AI Chat Platform
+# AI Chat Platform
 
-This repository contains a full-stack chat application that integrates Z.AI’s **GLM 4.5 Air Free** model via the OpenRouter API. It delivers a contextual chat experience with FastAPI + PostgreSQL on the backend and a React (Vite) frontend powered by `llm-ui` for smooth LLM output rendering.
+This repository contains a full-stack chat application that integrates Z.AI's **GLM 4.5 Air Free** model via the OpenRouter API. It delivers a contextual chat experience with FastAPI + PostgreSQL on the backend and a React (Vite) frontend powered by `llm-ui` for smooth LLM output rendering.
 
 > 💡 Default model: [`z-ai/glm-4.5-air:free`](https://openrouter.ai/z-ai/glm-4.5-air/api?utm_source=openai)
 
@@ -39,6 +39,8 @@ cp .env.example .env
 ```
 
 Update `.env` with your database connection string and `OPEN_ROUTER_API_KEY`.
+
+**Note:** By default, CORS is configured to allow requests from `http://localhost:5173` (dev) and `http://localhost:4173` (preview). To add more origins, set `BACKEND_CORS_ORIGINS` in `.env` as a comma-separated list.
 
 Run migrations/DDL by starting the app once (tables auto-create):
 
@@ -98,5 +100,5 @@ pytest
 
 ## License
 
-MIT © 2025 Pet AI Model contributors.
+MIT © 2025 AI Chat Platform contributors.
 

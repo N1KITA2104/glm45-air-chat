@@ -44,6 +44,9 @@ export const TooltipButton = forwardRef<HTMLButtonElement, TooltipButtonProps>((
     }
   };
 
+  const { 'aria-label': ariaLabelFromProps, ...restProps } = props;
+  const ariaLabel = ariaLabelFromProps || tooltip;
+
   return (
     <>
       <button
@@ -58,7 +61,8 @@ export const TooltipButton = forwardRef<HTMLButtonElement, TooltipButtonProps>((
           hideTooltip();
           onClick?.(e);
         }}
-        {...props}
+        aria-label={ariaLabel}
+        {...restProps}
       >
         {children}
       </button>

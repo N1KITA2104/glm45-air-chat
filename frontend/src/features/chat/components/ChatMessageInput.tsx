@@ -41,13 +41,13 @@ export const ChatMessageInput = ({ onSend, disabled }: Props) => {
     <form className="chat-input" onSubmit={handleSubmit}>
       <div className="chat-input-container">
         <textarea
-          placeholder="Ask about your pet's health, diet, or mood…"
+          placeholder="Type your message here…"
           value={value}
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
         />
-        <button type="submit" disabled={disabled} className="chat-input-send">
+        <button type="submit" disabled={disabled} className="chat-input-send" aria-label="Send message">
           <FiSend />
         </button>
       </div>

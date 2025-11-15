@@ -21,8 +21,14 @@
 }
 
 .profile-container header a {
-  color: var(--accent);
+  color: #8b7ef5;
   font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.profile-container header a:hover {
+  color: #a29bf7;
 }
 
 .profile-container form {
@@ -33,7 +39,8 @@
 
 .profile-container label {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 .profile-container input {
@@ -44,19 +51,38 @@
   color: var(--text-primary);
 }
 
+.profile-container input:disabled {
+  background: var(--bg-secondary);
+  color: rgba(245, 247, 255, 0.6);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
 .profile-container button {
   margin-top: 8px;
   padding: 12px;
   border-radius: 12px;
   border: none;
   background: var(--accent);
-  color: white;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.profile-container button:hover:not(:disabled) {
+  background: #7c6ef5;
+}
+
+.profile-container button:disabled {
+  background: rgba(108, 92, 231, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: not-allowed;
 }
 
 .profile-message {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  font-size: 14px;
 }
 

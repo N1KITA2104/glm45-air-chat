@@ -106,6 +106,11 @@ export const ChatSidebar = ({
             type="button"
             className={chat.id === activeChatId ? 'chat-item active' : 'chat-item'}
             onClick={() => onSelect(chat.id)}
+            aria-label={`${chat.title}, last updated ${new Date(chat.updated_at).toLocaleDateString(undefined, {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}`}
+            aria-current={chat.id === activeChatId ? 'true' : undefined}
           >
             <span className="chat-item-title">{chat.title}</span>
             <span className="chat-item-meta">
@@ -142,7 +147,7 @@ export const ChatSidebar = ({
           <>
             <div className="chat-sidebar-profile">
               <div className="chat-sidebar-profile-info">
-                <h3>{user?.display_name ?? 'Pet Lover'}</h3>
+                <h3>{user?.display_name ?? 'User'}</h3>
                 <span>{user?.email}</span>
               </div>
               <div className="chat-sidebar-profile-actions">

@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "ai-chat-platform",
   "private": true,
   "version": "0.0.0",
+  "description": "AI-powered chat application powered by GLM 4.5 Air Free",
   "type": "module",
   "scripts": {
     "dev": "vite",
