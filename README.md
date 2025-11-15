@@ -100,5 +100,14 @@ pytest
 
 ## License
 
-MIT © 2025 AI Chat Platform contributors.
+MIT License with Commercial Use Restriction
+
+Copyright (c) 2024 Nikita Apatiev
+
+This software is licensed under the MIT License with a commercial use restriction.
+- **Non-commercial use is permitted** for all users
+- **Commercial use is restricted** to the copyright holder (Nikita Apatiev) only
+- **AI-assisted development disclosure**: This software was developed with the assistance of artificial intelligence tools
+
+See [LICENSE](LICENSE) file for full details and terms.
 
