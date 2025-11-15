@@ -1,0 +1,2 @@
+"""Routes for chat management."""
+
