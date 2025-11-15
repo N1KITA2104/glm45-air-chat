@@ -191,6 +191,20 @@
   background: #1d2130;
 }
 
+.message-user[data-optimistic='true'] {
+  opacity: 0.7;
+  animation: message-sending 1.5s ease-in-out infinite;
+}
+
+@keyframes message-sending {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
 .message-ai {
   align-self: flex-start;
   background: #191d29;
@@ -199,8 +213,11 @@
 .message-meta {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   font-size: 12px;
   color: var(--text-secondary);
+  width: 100%;
 }
 
 .message-user-content {
