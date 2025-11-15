@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
+import { useCallback, useState } from 'react';
+import type { FormEvent, KeyboardEvent } from 'react';
 
 type Props = {
   onSend: (content: string) => Promise<void>;
@@ -10,8 +10,10 @@ export const ChatMessageInput = ({ onSend, disabled }: Props) => {
   const [value, setValue] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const sendMessage = useCallback(async () => {
+    if (disabled) {
+      return;
+    }
     if (!value.trim()) {
       setError('Please enter a message before sending.');
       return;
@@ -20,6 +22,18 @@ export const ChatMessageInput = ({ onSend, disabled }: Props) => {
     const content = value.trim();
     setValue('');
     await onSend(content);
+  }, [disabled, onSend, value]);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await sendMessage();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (!disabled && event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      void sendMessage();
+    }
   };
 
   return (
@@ -28,6 +42,7 @@ export const ChatMessageInput = ({ onSend, disabled }: Props) => {
         placeholder="Ask about your pet's health, diet, or mood…"
         value={value}
         onChange={(event) => setValue(event.target.value)}
+        onKeyDown={handleKeyDown}
         rows={3}
         disabled={disabled}
       />

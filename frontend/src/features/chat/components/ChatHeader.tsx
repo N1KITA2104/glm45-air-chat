@@ -16,14 +16,16 @@ export const ChatHeader = ({ chat, onDelete, onRename }: Props) => (
         </p>
       ) : null}
     </div>
-    <div className="chat-header-actions">
-      <button type="button" onClick={onRename} disabled={!chat}>
-        Rename
-      </button>
-      <button type="button" onClick={onDelete} disabled={!chat} className="danger">
-        Delete
-      </button>
-    </div>
+    {chat ? (
+      <div className="chat-header-actions">
+        <button type="button" onClick={onRename}>
+          Rename
+        </button>
+        <button type="button" onClick={onDelete} className="danger">
+          Delete
+        </button>
+      </div>
+    ) : null}
   </div>
 );
 

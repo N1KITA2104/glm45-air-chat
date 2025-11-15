@@ -31,11 +31,22 @@ export const ChatPage = () => {
     queryFn: fetchChats,
   });
 
+  const chats = chatsQuery.data ?? [];
+  const activeChat: Chat | null = useMemo(
+    () => chats.find((chat) => chat.id === activeChatId) ?? null,
+    [activeChatId, chats],
+  );
+
+  const activeChatQueryId = activeChat?.id ?? null;
+
   const messagesQuery = useQuery({
-    queryKey: ['messages', activeChatId],
-    queryFn: () => fetchMessages(activeChatId!),
-    enabled: Boolean(activeChatId),
+    queryKey: ['messages', activeChatQueryId],
+    queryFn: () => fetchMessages(activeChatQueryId!),
+    enabled: Boolean(activeChatQueryId),
     refetchInterval: 0,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   const createChatMutation = useMutation({
@@ -59,9 +70,10 @@ export const ChatPage = () => {
 
   const deleteChatMutation = useMutation({
     mutationFn: deleteChat,
-    onSuccess: () => {
+    onSuccess: (_, deletedId) => {
       queryClient.invalidateQueries({ queryKey: ['chats'] });
-      setActiveChatId(null);
+      queryClient.removeQueries({ queryKey: ['messages', deletedId], exact: true });
+      setActiveChatId((current) => (current === deletedId ? null : current));
     },
   });
 
@@ -74,14 +86,16 @@ export const ChatPage = () => {
     },
   });
 
-  const chats = chatsQuery.data ?? [];
-  const activeChat: Chat | null = useMemo(
-    () => chats.find((chat) => chat.id === activeChatId) ?? null,
-    [activeChatId, chats],
-  );
-
   useEffect(() => {
-    if (!activeChatId && chats.length > 0) {
+    if (chats.length === 0) {
+      if (activeChatId !== null) {
+        setActiveChatId(null);
+      }
+      return;
+    }
+
+    const exists = activeChatId ? chats.some((chat) => chat.id === activeChatId) : false;
+    if (!activeChatId || !exists) {
       setActiveChatId(chats[0].id);
     }
   }, [activeChatId, chats]);
