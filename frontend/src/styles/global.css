@@ -1,0 +1,55 @@
+:root {
+  color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #0f1116;
+  color: #f4f6fb;
+  --bg-primary: #11131a;
+  --bg-secondary: #181b24;
+  --bg-tertiary: #1f2330;
+  --border: rgba(255, 255, 255, 0.08);
+  --text-primary: #f5f7ff;
+  --text-secondary: rgba(245, 247, 255, 0.75);
+  --accent: #6c5ce7;
+  --success: #00c48c;
+  --danger: #ff6b6b;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+

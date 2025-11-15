@@ -1,0 +1,62 @@
+.profile-container {
+  max-width: 520px;
+  margin: 48px auto;
+  padding: 32px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile-container header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-container header h1 {
+  margin: 0;
+}
+
+.profile-container header a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.profile-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-container label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.profile-container input {
+  padding: 12px 14px;
+  background: var(--bg-tertiary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.profile-container button {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-message {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
