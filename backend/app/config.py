@@ -1,4 +1,5 @@
 from functools import lru_cache
+import os
 from typing import Any
 
 from pydantic import Field, field_validator
@@ -20,7 +21,11 @@ class Settings(BaseSettings):
     backend_cors_origins: list[str] = Field(
         default_factory=lambda: ["http://localhost:5173"]
     )
-    openrouter_api_key: str | None = Field(default=None)
+    open_router_api_key: str | None = Field(
+        default=None,
+        alias="OPEN_ROUTER_API_KEY",
+        description="OpenRouter API key",
+    )
     openrouter_model: str = Field(default="z-ai/glm-4.5-air")
     openrouter_temperature: float = Field(default=0.7)
     openrouter_max_history: int = Field(default=15)
@@ -38,6 +43,13 @@ class Settings(BaseSettings):
         if isinstance(value, str):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         return value
+
+    @field_validator("open_router_api_key", mode="before")
+    @classmethod
+    def _fallback_openrouter(cls, value: Any) -> str | None:
+        if value:
+            return value
+        return os.getenv("OPENROUTER_API_KEY")
 
 
 @lru_cache

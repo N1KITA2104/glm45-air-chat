@@ -38,7 +38,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Update `.env` with your database connection string and `OPENROUTER_API_KEY`.
+Update `.env` with your database connection string and `OPEN_ROUTER_API_KEY`.
 
 Run migrations/DDL by starting the app once (tables auto-create):
 

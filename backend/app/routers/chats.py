@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timezone
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -126,6 +126,8 @@ async def rename_chat(
 @router.delete(
     "/{chat_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+    response_model=None,
     summary="Delete a chat and its messages",
 )
 async def delete_chat(
@@ -173,7 +175,7 @@ async def send_message(
 ) -> Message:
     chat = await _get_chat_or_404(session, chat_id, current_user)
 
-    if not settings.openrouter_api_key:
+    if not settings.open_router_api_key:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="OpenRouter API key is not configured on the server.",
@@ -212,7 +214,7 @@ async def send_message(
     }
 
     headers = {
-        "Authorization": f"Bearer {settings.openrouter_api_key}",
+        "Authorization": f"Bearer {settings.open_router_api_key}",
         "Content-Type": "application/json",
     }
     if settings.app_name:

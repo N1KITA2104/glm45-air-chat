@@ -24,7 +24,7 @@ class UserBase(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    model_config = {"from_attributes": True}
+    model_config = {"from_attributes": True, "protected_namespaces": ()}
 
 
 class UserCreate(BaseModel):
@@ -67,7 +67,7 @@ class ChatBase(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    model_config = {"from_attributes": True}
+    model_config = {"from_attributes": True, "protected_namespaces": ()}
 
 
 class ChatCreate(BaseModel):
@@ -75,6 +75,8 @@ class ChatCreate(BaseModel):
 
     title: str | None = None
     model_name: str | None = None
+
+    model_config = {"protected_namespaces": ()}
 
 
 class ChatUpdate(BaseModel):
@@ -93,7 +95,7 @@ class MessageBase(BaseModel):
     model_name: str | None
     created_at: datetime
 
-    model_config = {"from_attributes": True}
+    model_config = {"from_attributes": True, "protected_namespaces": ()}
 
 
 class MessageCreate(BaseModel):
