@@ -21,6 +21,7 @@ class UserBase(BaseModel):
     id: UUID
     email: EmailStr
     display_name: str
+    settings: dict | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -48,7 +49,8 @@ class AuthResponse(Token):
 class UserUpdate(BaseModel):
     """Payload for updating user profile information."""
 
-    display_name: str = Field(min_length=1, max_length=255)
+    display_name: str | None = Field(default=None, min_length=1, max_length=255)
+    settings: dict | None = None
 
 
 class LoginRequest(BaseModel):

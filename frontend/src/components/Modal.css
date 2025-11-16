@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 10000;
@@ -26,14 +26,14 @@
 }
 
 .modal-content {
-  background: rgba(17, 19, 26, 0.95);
+  background: var(--menu-bg);
   backdrop-filter: blur(40px) saturate(180%) brightness(0.95);
   -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--menu-border);
   border-radius: 16px;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 0.5px rgba(255, 255, 255, 0.05) inset;
+    0 20px 60px var(--shadow-color),
+    0 0 0 0.5px var(--border) inset;
   width: 100%;
   max-width: 90vw;
   max-height: calc(100vh - 40px);
@@ -69,7 +69,7 @@
 
 .modal-header {
   padding: 24px 24px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
   margin-bottom: 32px;
   padding-bottom: 24px;
 }
@@ -96,11 +96,11 @@
 }
 
 .modal-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 .modal-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb-hover);
 }
 

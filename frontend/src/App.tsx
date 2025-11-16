@@ -10,6 +10,7 @@ import { RegisterPage } from './features/auth/RegisterPage';
 import { ChatPage } from './features/chat/ChatPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { useAuthActions } from './services/auth';
+import { useTheme } from './hooks/useTheme';
 
 const ProtectedLayout = () => {
   const token = useAuthStore((state) => state.token);
@@ -49,8 +50,14 @@ const LoadProfile = () => {
   return null;
 };
 
+const ThemeProvider = () => {
+  useTheme();
+  return null;
+};
+
 const App = () => (
   <>
+    <ThemeProvider />
     <LoadProfile />
     <Routes>
       <Route

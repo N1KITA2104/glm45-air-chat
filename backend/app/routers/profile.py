@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import attributes
 
 from ..database import get_session
 from ..deps import get_current_user
@@ -34,7 +35,17 @@ async def update_profile(
     session: AsyncSession = Depends(get_session),
 ) -> User:
     """Update profile fields for the authenticated user."""
-    current_user.display_name = payload.display_name
+    if payload.display_name is not None:
+        current_user.display_name = payload.display_name
+    
+    if payload.settings is not None:
+        # Merge settings with existing ones
+        if current_user.settings is None:
+            current_user.settings = {}
+        current_user.settings.update(payload.settings)
+        # Mark the JSONB field as modified so SQLAlchemy knows to update it
+        attributes.flag_modified(current_user, "settings")
+    
     session.add(current_user)
     await session.commit()
     await session.refresh(current_user)

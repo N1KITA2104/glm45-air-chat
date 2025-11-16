@@ -20,10 +20,10 @@
 }
 
 .chat-sidebar {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--sidebar-bg);
   backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -53,11 +53,11 @@
 }
 
 .chat-sidebar-resize-handle:hover {
-  background: rgba(108, 92, 231, 0.3);
+  background: rgba(var(--accent-rgb), 0.3);
 }
 
 .chat-sidebar-resize-handle:active {
-  background: rgba(108, 92, 231, 0.5);
+  background: rgba(var(--accent-rgb), 0.5);
 }
 
 .chat-sidebar > * {
@@ -76,7 +76,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--sidebar-header-border);
   min-height: 60px;
 }
 
@@ -121,7 +121,7 @@
 }
 
 .chat-sidebar-header button:hover {
-  background: #7c6ef5;
+  background: var(--accent);
   transform: scale(1.05);
 }
 
@@ -131,16 +131,16 @@
 }
 
 .chat-sidebar-header .tooltip-button {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--tooltip-bg);
   backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--tooltip-border);
   color: var(--text-primary);
 }
 
 .chat-sidebar-header .tooltip-button:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--menu-item-hover);
+  border-color: var(--border);
 }
 
 .sidebar-new-chat-btn {
@@ -150,7 +150,7 @@
 }
 
 .sidebar-new-chat-btn:hover {
-  background: #7c6ef5 !important;
+  background: var(--accent) !important;
 }
 
 .sidebar-collapse-btn {
@@ -202,18 +202,18 @@
 }
 
 .chat-sidebar-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
   transition: background 0.2s ease;
 }
 
 .chat-sidebar-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb-hover);
 }
 
 .chat-sidebar-list {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 .chat-item {
@@ -240,11 +240,11 @@
 }
 
 .chat-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--menu-item-hover);
 }
 
 .chat-item.active {
-  background: rgba(108, 92, 231, 0.18);
+  background: var(--message-user-bg);
   border-left: 3px solid var(--accent);
 }
 
@@ -272,7 +272,7 @@
 
 .chat-sidebar-footer {
   padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--sidebar-header-border);
   margin-top: auto;
   flex-shrink: 0;
   transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -336,8 +336,8 @@
   width: 32px;
   height: 32px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--tooltip-border);
+  background: var(--tooltip-bg);
   backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   color: var(--text-primary);
@@ -346,8 +346,8 @@
 }
 
 .chat-sidebar-profile-actions .tooltip-button:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--menu-item-hover);
+  border-color: var(--border);
   transform: scale(1.05);
 }
 
@@ -367,8 +367,8 @@
   width: 32px;
   height: 32px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--tooltip-border);
+  background: var(--tooltip-bg);
   backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   color: var(--text-primary);
@@ -377,8 +377,8 @@
 }
 
 .chat-sidebar-footer .tooltip-button:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--menu-item-hover);
+  border-color: var(--border);
   transform: scale(1.05);
 }
 
@@ -390,16 +390,16 @@
 .profile-menu {
   position: fixed;
   min-width: 180px;
-  background: rgba(17, 19, 26, 0.85);
+  background: var(--menu-bg);
   backdrop-filter: blur(30px) saturate(180%) brightness(0.9);
   -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--menu-border);
   border-radius: 12px;
   padding: 8px;
   z-index: 10001;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 0.5px rgba(255, 255, 255, 0.05) inset;
+    0 8px 32px var(--shadow-color),
+    0 0 0 0.5px var(--border) inset;
   animation: menuFadeIn 0.2s ease;
 }
 
@@ -432,7 +432,7 @@
 }
 
 .profile-menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--menu-item-hover);
 }
 
 .profile-menu-item svg {
@@ -447,6 +447,7 @@
 
 .profile-menu-item-danger:hover {
   background: rgba(255, 107, 107, 0.15);
+  color: var(--danger);
 }
 
 .chat-main {
@@ -463,8 +464,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--sidebar-border);
+  background: var(--sidebar-bg);
   backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
 }
@@ -489,8 +490,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--tooltip-border);
+  background: var(--tooltip-bg);
   backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   color: var(--text-primary);
@@ -503,8 +504,8 @@
 }
 
 .chat-header-actions button:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--menu-item-hover);
+  border-color: var(--border);
   transform: scale(1.05);
 }
 
@@ -521,14 +522,15 @@
 .tooltip {
   position: fixed;
   padding: 6px 10px;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
+  background: var(--menu-bg);
+  color: var(--text-primary);
   font-size: 12px;
   white-space: nowrap;
   border-radius: 6px;
+  border: 1px solid var(--menu-border);
   pointer-events: none;
   z-index: 10000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px var(--shadow-color);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: opacity 0.2s ease;
@@ -547,28 +549,28 @@
   top: 100%;
   transform: translateX(-50%);
   margin-top: -1px;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: var(--menu-bg);
 }
 
 .tooltip-bottom .tooltip-arrow {
   bottom: 100%;
   transform: translateX(-50%);
   margin-bottom: -1px;
-  border-bottom-color: rgba(0, 0, 0, 0.9);
+  border-bottom-color: var(--menu-bg);
 }
 
 .tooltip-left .tooltip-arrow {
   left: 100%;
   transform: translateY(-50%);
   margin-left: -1px;
-  border-left-color: rgba(0, 0, 0, 0.9);
+  border-left-color: var(--menu-bg);
 }
 
 .tooltip-right .tooltip-arrow {
   right: 100%;
   transform: translateY(-50%);
   margin-right: -1px;
-  border-right-color: rgba(0, 0, 0, 0.9);
+  border-right-color: var(--menu-bg);
 }
 
 .chat-header-actions button.danger {
@@ -583,7 +585,7 @@
   padding: 24px;
   background: var(--bg-primary);
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 .chat-body::-webkit-scrollbar {
@@ -595,13 +597,13 @@
 }
 
 .chat-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
   transition: background 0.2s ease;
 }
 
 .chat-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--scrollbar-thumb-hover);
 }
 
 .messages-scroll {
@@ -624,20 +626,20 @@
   gap: 8px;
   padding: 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--message-bg);
   backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--message-border);
   max-width: 760px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px var(--shadow-light), 0 0 0 0.5px var(--border);
 }
 
 .message-user {
   align-self: flex-end;
-  background: rgba(108, 92, 231, 0.2);
+  background: var(--message-user-bg);
   backdrop-filter: blur(25px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(1.15);
-  border-color: rgba(108, 92, 231, 0.35);
+  border-color: var(--message-user-border);
 }
 
 .message-user[data-optimistic='true'] {
@@ -656,7 +658,7 @@
 
 .message-ai {
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--message-bg);
   backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
 }
@@ -702,14 +704,14 @@
   color: var(--accent);
   font-weight: 600;
   text-decoration: none;
-  border-bottom: 1px dashed rgba(108, 92, 231, 0.4);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.4);
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .message-assistant a:hover,
 .message-assistant a:focus-visible {
-  color: #8f82ff;
-  border-color: rgba(108, 92, 231, 0.8);
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.8);
   outline: none;
 }
 
@@ -729,17 +731,17 @@
 .message-assistant blockquote {
   margin: 0;
   padding: 14px 18px;
-  border-left: 3px solid rgba(108, 92, 231, 0.6);
+  border-left: 3px solid var(--blockquote-border);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(245, 247, 255, 0.75);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background: var(--blockquote-bg);
+  color: var(--text-secondary);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 .message-assistant hr {
   height: 1px;
   border: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border);
   margin: 16px 0;
 }
 
@@ -748,26 +750,26 @@
   border-collapse: collapse;
   border-radius: 14px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  background: var(--table-bg);
+  box-shadow: 0 12px 28px var(--shadow-color);
 }
 
 .message-assistant thead {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--table-header-bg);
 }
 
 .message-assistant th,
 .message-assistant td {
   padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--table-border);
   text-align: left;
-  color: rgba(245, 247, 255, 0.8);
+  color: var(--text-primary);
 }
 
 .message-assistant :not(pre) > code,
 .message-assistant .llm-inline-code {
   font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--tooltip-bg);
   border-radius: 8px;
   padding: 2px 6px;
   font-size: 13px;
@@ -778,14 +780,14 @@
 .message-assistant pre {
   margin: 0;
   padding: 16px 18px;
-  background: rgba(12, 14, 20, 0.82);
+  background: var(--code-bg);
   border-radius: 14px;
   overflow-x: auto;
   font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
   font-size: 13px;
   line-height: 1.7;
-  color: rgba(245, 247, 255, 0.85);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 @keyframes code-block-appear {
@@ -802,9 +804,9 @@
 .llm-code-block {
   margin: 8px 0 4px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(145deg, rgba(17, 19, 26, 0.95), rgba(24, 27, 36, 0.82));
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--code-block-border);
+  background: var(--code-block-bg);
+  box-shadow: 0 2px 8px var(--shadow-light), inset 0 1px 0 var(--border);
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
@@ -822,8 +824,8 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 18px;
-  background: linear-gradient(135deg, rgba(108, 92, 231, 0.28), rgba(108, 92, 231, 0.08));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--message-user-bg);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 2;
@@ -833,7 +835,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: rgba(245, 247, 255, 0.72);
+  color: var(--text-secondary);
 }
 
 .llm-code-block__copy {
@@ -843,8 +845,8 @@
   padding: 6px 12px;
   border-radius: 12px;
   border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(245, 247, 255, 0.78);
+  background: var(--tooltip-bg);
+  color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -853,17 +855,17 @@
 
 .llm-code-block__copy:hover,
 .llm-code-block__copy:focus-visible {
-  color: #ffffff;
-  background: rgba(108, 92, 231, 0.28);
-  border-color: rgba(108, 92, 231, 0.5);
+  color: var(--text-primary);
+  background: var(--message-user-bg);
+  border-color: var(--accent);
   outline: none;
 }
 
 .llm-code-block__copy--copied {
-  color: #ffffff;
-  background: rgba(108, 92, 231, 0.4);
-  border-color: rgba(108, 92, 231, 0.55);
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+  color: var(--text-primary);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
 }
 
 .llm-code-block__copy {
@@ -890,11 +892,11 @@
 .llm-code-block__pre {
   margin: 0;
   padding: 18px 20px 20px;
-  background: rgba(9, 11, 16, 0.88);
+  background: var(--code-bg);
   font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
   font-size: 13px;
   line-height: 1.8;
-  color: rgba(245, 247, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .llm-code-block__pre code {
@@ -908,18 +910,18 @@
 }
 
 .llm-code-block__body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--scrollbar-thumb);
   border-radius: 999px;
 }
 
 .llm-code-block__body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.26);
+  background: var(--scrollbar-thumb-hover);
 }
 
 .chat-input {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--sidebar-border);
   padding: 20px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--sidebar-bg);
   backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
   display: flex;
@@ -931,19 +933,19 @@
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--tooltip-bg);
   backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--tooltip-border);
   border-radius: 20px;
   padding: 12px 16px;
   transition: all 0.2s ease;
 }
 
 .chat-input-container:focus-within {
-  border-color: rgba(108, 92, 231, 0.5);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15), 0 4px 16px var(--shadow-light);
 }
 
 .chat-input textarea {
@@ -983,7 +985,7 @@
 }
 
 .chat-input-send:hover:not(:disabled) {
-  background: #7c6ef5;
+  background: var(--accent);
   transform: scale(1.05);
 }
 
