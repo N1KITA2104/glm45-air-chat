@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import DateTime, ForeignKey, String, Text, func
+from sqlalchemy import DateTime, ForeignKey, String, Text, func, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing import Any
@@ -40,11 +40,47 @@ class User(TimestampMixin, Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     display_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     settings: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True, default=None)
 
     chats: Mapped[list["Chat"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+
+
+class EmailVerificationCode(Base):
+    """Email verification codes with expiration."""
+
+    __tablename__ = "email_verification_codes"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        index=True,
+        nullable=False,
+    )
+    code: Mapped[str] = mapped_column(String(6), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    used: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+    def is_expired(self) -> bool:
+        """Check if the verification code has expired."""
+        if self.expires_at.tzinfo is None:
+            # If expires_at has no timezone, compare with UTC
+            return datetime.now(timezone.utc) > self.expires_at.replace(tzinfo=timezone.utc)
+        return datetime.now(timezone.utc) > self.expires_at
+
+    def is_valid(self) -> bool:
+        """Check if the code is valid (not used and not expired)."""
+        return not self.used and not self.is_expired()
 
 
 class Chat(TimestampMixin, Base):
@@ -96,4 +132,3 @@ class Message(Base):
     )
 
     chat: Mapped[Chat] = relationship(back_populates="messages")
-

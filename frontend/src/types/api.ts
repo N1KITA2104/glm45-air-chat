@@ -10,6 +10,7 @@ export interface User {
   id: string;
   email: string;
   display_name: string;
+  email_verified: boolean;
   settings?: UserSettings | null;
   created_at: string;
   updated_at: string;

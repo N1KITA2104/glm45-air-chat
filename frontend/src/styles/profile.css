@@ -204,6 +204,170 @@
   opacity: 0.7;
 }
 
+/* Email Input with Verification Icon */
+.profile-email-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-email-input-wrapper input {
+  padding-right: 48px;
+}
+
+.profile-email-verified-icon {
+  position: absolute;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  animation: icon-appear 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes icon-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.profile-email-verified-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Verification Code Input */
+.profile-verification-code-input {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.profile-verification-code-input input {
+  width: 56px;
+  height: 64px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.profile-verification-code-input input:hover:not(:focus):not(:disabled) {
+  border-color: rgba(var(--accent-rgb), 0.4);
+  background: var(--bg-tertiary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-verification-code-input input:focus {
+  border-color: var(--accent);
+  background: var(--bg-secondary);
+  box-shadow: 
+    0 0 0 4px rgba(var(--accent-rgb), 0.15),
+    0 8px 20px rgba(var(--accent-rgb), 0.2);
+  transform: translateY(-3px) scale(1.05);
+  animation: code-input-focus 0.3s ease-out;
+}
+
+@keyframes code-input-focus {
+  0% {
+    transform: translateY(-3px) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.08);
+  }
+  100% {
+    transform: translateY(-3px) scale(1.05);
+  }
+}
+
+.profile-verification-code-input input.profile-code-filled {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  box-shadow: 
+    0 0 0 2px rgba(16, 185, 129, 0.2),
+    0 4px 12px rgba(16, 185, 129, 0.15);
+  animation: code-filled-pulse 0.4s ease-out;
+}
+
+@keyframes code-filled-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.profile-verification-code-input input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Code Progress Bar */
+.profile-code-progress {
+  margin-top: 12px;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-code-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(var(--accent-rgb), 0.8) 100%);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-code-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progress-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes progress-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.profile-code-progress-bar[style*="100%"] {
+  background: linear-gradient(90deg, #10b981 0%, rgba(16, 185, 129, 0.8) 100%);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+}
+
 /* Range input */
 .profile-container input[type="range"] {
   width: 100%;
@@ -409,5 +573,33 @@
   .profile-submit-btn {
     width: 100%;
     align-self: stretch;
+  }
+
+  .profile-verification-code-input {
+    gap: 8px;
+  }
+
+  .profile-verification-code-input input {
+    width: 48px;
+    height: 56px;
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-verification-code-input {
+    gap: 6px;
+  }
+
+  .profile-verification-code-input input {
+    width: 44px;
+    height: 52px;
+    font-size: 22px;
+    border-radius: 10px;
+  }
+
+  .profile-verification-badge {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }

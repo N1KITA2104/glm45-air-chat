@@ -30,6 +30,13 @@ class Settings(BaseSettings):
     openrouter_temperature: float = Field(default=0.7)
     openrouter_max_history: int = Field(default=15)
     debug_sql: bool = Field(default=False)
+    # SMTP settings for email verification
+    smtp_host: str = Field(default="smtp.gmail.com", description="SMTP server host")
+    smtp_port: int = Field(default=587, description="SMTP server port")
+    smtp_user: str | None = Field(default=None, description="SMTP username (email)")
+    smtp_password: str | None = Field(default=None, description="SMTP password or app password")
+    smtp_from_email: str | None = Field(default=None, description="From email address")
+    smtp_from_name: str = Field(default="AI Chat Platform", description="From name")
     system_prompt: str = Field(
         default=(
             "You are an AI assistant helping users with their questions. "

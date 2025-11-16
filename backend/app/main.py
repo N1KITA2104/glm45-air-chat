@@ -35,6 +35,18 @@ def create_app() -> FastAPI:
                 await conn.execute(
                     text("ALTER TABLE users ADD COLUMN settings JSONB DEFAULT NULL")
                 )
+            # Check if email_verified column exists
+            result = await conn.execute(
+                text("""
+                    SELECT column_name 
+                    FROM information_schema.columns 
+                    WHERE table_name = 'users' AND column_name = 'email_verified'
+                """)
+            )
+            if result.scalar() is None:
+                await conn.execute(
+                    text("ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT FALSE NOT NULL")
+                )
         try:
             yield
         finally:

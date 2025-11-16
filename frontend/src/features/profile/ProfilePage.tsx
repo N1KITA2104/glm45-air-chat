@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { FormEvent } from 'react';
 
-import { updateProfile } from '../../services/auth';
+import { updateProfile, sendVerificationCode, verifyEmail, fetchProfile } from '../../services/auth';
 import { useAuthStore } from '../../store/authStore';
 import type { UserSettings } from '../../types/api';
 import { useTheme } from '../../hooks/useTheme';
@@ -18,7 +18,8 @@ export const ProfilePage = () => {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const [displayName, setDisplayName] = useState(user?.display_name ?? '');
-  const [activeTab, setActiveTab] = useState<'profile' | 'settings'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'settings' | 'security'>('profile');
+  const [verificationCode, setVerificationCode] = useState('');
   const { toast, showToast, hideToast } = useToast();
   
   // Apply theme changes immediately
@@ -103,6 +104,46 @@ export const ProfilePage = () => {
     mutation.mutate({ settings });
   };
 
+  // Email verification mutations
+  const sendCodeMutation = useMutation({
+    mutationFn: sendVerificationCode,
+    onSuccess: () => {
+      showToast('Verification code sent to your email!', 'success');
+    },
+    onError: (error: any) => {
+      showToast(error?.response?.data?.detail || 'Failed to send verification code. Please try again.', 'error');
+    },
+  });
+
+  const verifyEmailMutation = useMutation({
+    mutationFn: verifyEmail,
+    onSuccess: async () => {
+      showToast('Email verified successfully!', 'success');
+      setVerificationCode('');
+      // Refresh user data
+      const updatedUser = await fetchProfile();
+      if (updatedUser) {
+        setUser(updatedUser);
+        await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      }
+    },
+    onError: (error: any) => {
+      showToast(error?.response?.data?.detail || 'Invalid verification code. Please try again.', 'error');
+    },
+  });
+
+  const handleSendCode = () => {
+    sendCodeMutation.mutate();
+  };
+
+  const handleVerifyEmail = () => {
+    if (verificationCode.length !== 6) {
+      showToast('Please enter a 6-digit verification code.', 'error');
+      return;
+    }
+    verifyEmailMutation.mutate(verificationCode);
+  };
+
   const handleSettingChange = <K extends keyof UserSettings>(
     key: K,
     value: UserSettings[K]
@@ -141,6 +182,13 @@ export const ProfilePage = () => {
           onClick={() => setActiveTab('settings')}
         >
           Settings
+        </button>
+        <button
+          type="button"
+          className={`profile-tab ${activeTab === 'security' ? 'active' : ''}`}
+          onClick={() => setActiveTab('security')}
+        >
+          Security
         </button>
       </div>
 
@@ -287,6 +335,144 @@ export const ProfilePage = () => {
             {mutation.isPending ? 'Saving…' : 'Save settings'}
           </button>
         </form>
+      )}
+
+      {activeTab === 'security' && (
+        <div className="profile-form">
+          <div className="profile-settings-section">
+            <h2>Email Verification</h2>
+            
+            <div className="profile-form-group">
+              <label htmlFor="security-email">Email Address</label>
+              <div className="profile-email-input-wrapper">
+                <input 
+                  id="security-email" 
+                  type="email"
+                  value={user?.email || ''} 
+                  disabled 
+                />
+                {user?.email_verified && (
+                  <div className="profile-email-verified-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M16.5 5.5L8 14L3.5 9.5" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {!user?.email_verified && (
+              <>
+                <div className="profile-form-group">
+                  <label htmlFor="security-verification-code">Verification Code</label>
+                  <div className="profile-verification-code-input">
+                    {[0, 1, 2, 3, 4, 5].map((index) => {
+                      const inputRef = `code-input-${index}`;
+                      return (
+                        <input
+                          key={index}
+                          id={inputRef}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]"
+                          maxLength={1}
+                          value={verificationCode[index] || ''}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 1);
+                            if (value) {
+                              const newCode = verificationCode.split('');
+                              newCode[index] = value;
+                              const updatedCode = newCode.join('').slice(0, 6);
+                              setVerificationCode(updatedCode);
+                              // Auto-focus next input
+                              if (index < 5 && value) {
+                                setTimeout(() => {
+                                  const nextInput = document.getElementById(`code-input-${index + 1}`) as HTMLInputElement;
+                                  nextInput?.focus();
+                                }, 10);
+                              }
+                            } else {
+                              const newCode = verificationCode.split('');
+                              newCode[index] = '';
+                              setVerificationCode(newCode.join(''));
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Backspace' && !verificationCode[index] && index > 0) {
+                              e.preventDefault();
+                              const prevInput = document.getElementById(`code-input-${index - 1}`) as HTMLInputElement;
+                              prevInput?.focus();
+                            } else if (e.key === 'ArrowLeft' && index > 0) {
+                              e.preventDefault();
+                              const prevInput = document.getElementById(`code-input-${index - 1}`) as HTMLInputElement;
+                              prevInput?.focus();
+                            } else if (e.key === 'ArrowRight' && index < 5) {
+                              e.preventDefault();
+                              const nextInput = document.getElementById(`code-input-${index + 1}`) as HTMLInputElement;
+                              nextInput?.focus();
+                            }
+                          }}
+                          onPaste={(e) => {
+                            e.preventDefault();
+                            const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                            if (pastedData.length > 0) {
+                              setVerificationCode(pastedData);
+                              const nextIndex = Math.min(index + pastedData.length, 5);
+                              setTimeout(() => {
+                                const nextInput = document.getElementById(`code-input-${nextIndex}`) as HTMLInputElement;
+                                nextInput?.focus();
+                              }, 10);
+                            }
+                          }}
+                          className={verificationCode[index] ? 'profile-code-filled' : ''}
+                          autoFocus={index === 0 && verificationCode.length === 0}
+                        />
+                      );
+                    })}
+                  </div>
+                  <span className="profile-hint">Enter the 6-digit code sent to your email</span>
+                  {verificationCode.length > 0 && (
+                    <div className="profile-code-progress">
+                      <div 
+                        className="profile-code-progress-bar" 
+                        style={{ width: `${(verificationCode.length / 6) * 100}%` }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={handleSendCode}
+                    disabled={sendCodeMutation.isPending}
+                    className="profile-submit-btn"
+                    style={{ flex: 1 }}
+                  >
+                    {sendCodeMutation.isPending ? 'Sending…' : 'Send Verification Code'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleVerifyEmail}
+                    disabled={verifyEmailMutation.isPending || verificationCode.length !== 6}
+                    className="profile-submit-btn"
+                    style={{ flex: 1 }}
+                  >
+                    {verifyEmailMutation.isPending ? 'Verifying…' : 'Verify Email'}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {user?.email_verified && (
+              <div className="profile-form-group">
+                <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
+                  Your email address has been verified. You can use all features of the platform.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {toast.isVisible && (

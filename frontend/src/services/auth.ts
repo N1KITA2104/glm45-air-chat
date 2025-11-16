@@ -22,6 +22,26 @@ export const updateProfile = async (payload: UpdateProfileRequest): Promise<User
   return response.data;
 };
 
+export const sendVerificationCode = async (): Promise<{ message: string }> => {
+  const response = await apiClient.post<{ message: string }>('/profile/send-verification-code');
+  return response.data;
+};
+
+export const verifyEmail = async (code: string): Promise<{ message: string }> => {
+  const response = await apiClient.post<{ message: string }>('/profile/verify-email', { code });
+  return response.data;
+};
+
+export const requestPasswordReset = async (email: string): Promise<{ message: string }> => {
+  const response = await apiClient.post<{ message: string }>('/auth/request-password-reset', { email });
+  return response.data;
+};
+
+export const resetPassword = async (email: string, code: string, newPassword: string): Promise<{ message: string }> => {
+  const response = await apiClient.post<{ message: string }>('/auth/reset-password', { email, code, new_password: newPassword });
+  return response.data;
+};
+
 export const useAuthActions = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearAuth = useAuthStore((state) => state.clearAuth);
