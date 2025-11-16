@@ -1,0 +1,139 @@
+.custom-select {
+  position: relative;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.custom-select:hover:not(.custom-select--disabled) {
+  border-color: var(--accent);
+  background: var(--input-bg);
+}
+
+.custom-select:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+}
+
+.custom-select--open {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+}
+
+.custom-select--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--bg-tertiary);
+}
+
+.custom-select__value {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select__arrow {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.custom-select--open .custom-select__arrow {
+  transform: rotate(180deg);
+}
+
+.custom-select__dropdown {
+  position: absolute;
+  z-index: 10003;
+  background: var(--menu-bg);
+  backdrop-filter: blur(40px) saturate(180%) brightness(0.95);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(0.95);
+  border: 1px solid var(--menu-border);
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 32px var(--shadow-color),
+    0 0 0 0.5px var(--border) inset;
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: dropdownFadeIn 0.2s ease;
+  margin-top: 4px;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.custom-select__dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-select__dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-select__dropdown::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+.custom-select__dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+.custom-select__option {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+}
+
+.custom-select__option:hover {
+  background: var(--menu-item-hover);
+}
+
+.custom-select__option--selected {
+  background: var(--message-user-bg);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.custom-select__option--selected:hover {
+  background: var(--message-user-bg);
+}
+
+.custom-select__check {
+  flex-shrink: 0;
+  color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
