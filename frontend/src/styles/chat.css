@@ -677,14 +677,243 @@
 
 .message-assistant {
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.65;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-assistant p {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.message-assistant p + p,
+.message-assistant p + ul,
+.message-assistant p + ol,
+.message-assistant p + blockquote,
+.message-assistant ul + p,
+.message-assistant ol + p {
+  margin-top: 8px;
+}
+
+.message-assistant a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(108, 92, 231, 0.4);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.message-assistant a:hover,
+.message-assistant a:focus-visible {
+  color: #8f82ff;
+  border-color: rgba(108, 92, 231, 0.8);
+  outline: none;
+}
+
+.message-assistant ul,
+.message-assistant ol {
+  margin: 0 0 0 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.message-assistant li {
+  color: var(--text-secondary);
+}
+
+.message-assistant blockquote {
+  margin: 0;
+  padding: 14px 18px;
+  border-left: 3px solid rgba(108, 92, 231, 0.6);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(245, 247, 255, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.message-assistant hr {
+  height: 1px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 16px 0;
+}
+
+.message-assistant table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.message-assistant thead {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.message-assistant th,
+.message-assistant td {
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  color: rgba(245, 247, 255, 0.8);
+}
+
+.message-assistant :not(pre) > code,
+.message-assistant .llm-inline-code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 2px 6px;
+  font-size: 13px;
+  color: var(--text-primary);
+  word-break: break-word;
 }
 
 .message-assistant pre {
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
+  margin: 0;
+  padding: 16px 18px;
+  background: rgba(12, 14, 20, 0.82);
+  border-radius: 14px;
   overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(245, 247, 255, 0.85);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+@keyframes code-block-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.llm-code-block {
+  margin: 8px 0 4px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(145deg, rgba(17, 19, 26, 0.95), rgba(24, 27, 36, 0.82));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 520px;
+  isolation: isolate;
+  animation: code-block-appear 0.4s ease-out;
+}
+
+
+.llm-code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.28), rgba(108, 92, 231, 0.08));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.llm-code-block__lang {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(245, 247, 255, 0.72);
+}
+
+.llm-code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(245, 247, 255, 0.78);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.llm-code-block__copy:hover,
+.llm-code-block__copy:focus-visible {
+  color: #ffffff;
+  background: rgba(108, 92, 231, 0.28);
+  border-color: rgba(108, 92, 231, 0.5);
+  outline: none;
+}
+
+.llm-code-block__copy--copied {
+  color: #ffffff;
+  background: rgba(108, 92, 231, 0.4);
+  border-color: rgba(108, 92, 231, 0.55);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.llm-code-block__copy {
+  position: sticky;
+  top: 12px;
+  margin-left: auto;
+}
+
+.llm-code-block__copy svg {
+  width: 16px;
+  height: 16px;
+}
+
+.llm-code-block__copy-label {
+  line-height: 1;
+}
+
+.llm-code-block__body {
+  overflow: auto;
+  flex: 1 1 auto;
+  contain: layout style paint;
+}
+
+.llm-code-block__pre {
+  margin: 0;
+  padding: 18px 20px 20px;
+  background: rgba(9, 11, 16, 0.88);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(245, 247, 255, 0.9);
+}
+
+.llm-code-block__pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.llm-code-block__body::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.llm-code-block__body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+
+.llm-code-block__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.26);
 }
 
 .chat-input {

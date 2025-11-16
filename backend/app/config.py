@@ -33,7 +33,19 @@ class Settings(BaseSettings):
     system_prompt: str = Field(
         default=(
             "You are an AI assistant helping users with their questions. "
-            "Provide concise, friendly, and informative answers."
+            "Provide concise, friendly, and informative answers.\n\n"
+            "IMPORTANT: When presenting tabular data, always use HTML table format instead of markdown. "
+            "Use proper HTML table tags: <table>, <thead>, <tbody>, <tr>, <th>, and <td>. "
+            "Do not use markdown table syntax (| col1 | col2 |). "
+            "Example format:\n"
+            "<table>\n"
+            "<thead>\n"
+            "<tr><th>Column 1</th><th>Column 2</th></tr>\n"
+            "</thead>\n"
+            "<tbody>\n"
+            "<tr><td>Data 1</td><td>Data 2</td></tr>\n"
+            "</tbody>\n"
+            "</table>"
         )
     )
 
