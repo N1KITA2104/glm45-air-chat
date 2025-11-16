@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from sqlalchemy import text
 
 from .config import get_settings
 from .database import dispose_engine, get_engine, init_engine
@@ -22,6 +23,18 @@ def create_app() -> FastAPI:
         engine = get_engine()
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+            # Check if settings column exists, if not add it
+            result = await conn.execute(
+                text("""
+                    SELECT column_name 
+                    FROM information_schema.columns 
+                    WHERE table_name = 'users' AND column_name = 'settings'
+                """)
+            )
+            if result.scalar() is None:
+                await conn.execute(
+                    text("ALTER TABLE users ADD COLUMN settings JSONB DEFAULT NULL")
+                )
         try:
             yield
         finally:

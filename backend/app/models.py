@@ -6,8 +6,9 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, String, Text, func
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from typing import Any
 
 
 class Base(DeclarativeBase):
@@ -39,6 +40,7 @@ class User(TimestampMixin, Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     display_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    settings: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True, default=None)
 
     chats: Mapped[list["Chat"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"

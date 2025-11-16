@@ -1,7 +1,16 @@
+export interface UserSettings {
+  default_model?: string;
+  default_temperature?: number;
+  theme?: 'light' | 'dark' | 'auto';
+  auto_scroll?: boolean;
+  accent_color?: string;
+}
+
 export interface User {
   id: string;
   email: string;
   display_name: string;
+  settings?: UserSettings | null;
   created_at: string;
   updated_at: string;
 }
@@ -24,7 +33,8 @@ export interface RegisterRequest {
 }
 
 export interface UpdateProfileRequest {
-  display_name: string;
+  display_name?: string;
+  settings?: UserSettings;
 }
 
 export interface Chat {
