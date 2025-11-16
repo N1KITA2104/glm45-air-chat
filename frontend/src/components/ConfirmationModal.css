@@ -19,21 +19,21 @@
 
 .confirmation-button {
   padding: 10px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--tooltip-border);
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--tooltip-bg);
   backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
   color: var(--text-primary);
 }
 
 .confirmation-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--menu-item-hover);
+  border-color: var(--border);
   transform: translateY(-1px);
 }
 
@@ -47,11 +47,11 @@
 }
 
 .confirmation-button-cancel {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
 }
 
 .confirmation-button-cancel:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--tooltip-bg);
 }
 
 .confirmation-button-danger {

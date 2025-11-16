@@ -10,8 +10,82 @@
   --text-primary: #f5f7ff;
   --text-secondary: rgba(245, 247, 255, 0.75);
   --accent: #6c5ce7;
+  --accent-rgb: 108, 92, 231;
   --success: #00c48c;
   --danger: #ff6b6b;
+  
+  /* Additional theme variables for chat components */
+  --sidebar-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-border: rgba(255, 255, 255, 0.12);
+  --sidebar-header-border: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.2);
+  --message-bg: rgba(255, 255, 255, 0.1);
+  --message-border: rgba(255, 255, 255, 0.15);
+  --message-user-bg: rgba(108, 92, 231, 0.2);
+  --message-user-border: rgba(108, 92, 231, 0.35);
+  --code-bg: rgba(12, 14, 20, 0.82);
+  --code-block-bg: rgba(17, 19, 26, 0.95);
+  --code-block-border: rgba(255, 255, 255, 0.12);
+  --table-bg: rgba(255, 255, 255, 0.04);
+  --table-header-bg: rgba(255, 255, 255, 0.08);
+  --table-border: rgba(255, 255, 255, 0.08);
+  --blockquote-bg: rgba(255, 255, 255, 0.05);
+  --blockquote-border: rgba(108, 92, 231, 0.6);
+  --menu-bg: rgba(17, 19, 26, 0.85);
+  --menu-border: rgba(255, 255, 255, 0.1);
+  --menu-item-hover: rgba(255, 255, 255, 0.08);
+  --tooltip-bg: rgba(255, 255, 255, 0.12);
+  --tooltip-border: rgba(255, 255, 255, 0.15);
+  --input-bg: var(--bg-tertiary);
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --shadow-light: rgba(0, 0, 0, 0.15);
+  --overlay-bg: rgba(0, 0, 0, 0.6);
+}
+
+/* Light theme */
+:root[data-theme='light'] {
+  color-scheme: light;
+  background-color: #f5f7fa;
+  color: #1a1d29;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fb;
+  --bg-tertiary: #f0f2f5;
+  --border: rgba(0, 0, 0, 0.1);
+  --text-primary: #1a1d29;
+  --text-secondary: rgba(26, 29, 41, 0.85);
+  --accent: #6c5ce7;
+  --accent-rgb: 108, 92, 231;
+  --success: #00c48c;
+  --danger: #ff6b6b;
+  
+  /* Light theme overrides */
+  --sidebar-bg: rgba(255, 255, 255, 0.7);
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-header-border: rgba(0, 0, 0, 0.08);
+  --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
+  --message-bg: rgba(255, 255, 255, 0.9);
+  --message-border: rgba(0, 0, 0, 0.1);
+  --message-user-bg: rgba(108, 92, 231, 0.12);
+  --message-user-border: rgba(108, 92, 231, 0.25);
+  --code-bg: #f8f9fa;
+  --code-block-bg: #ffffff;
+  --code-block-border: rgba(0, 0, 0, 0.1);
+  --table-bg: rgba(255, 255, 255, 0.95);
+  --table-header-bg: rgba(240, 242, 245, 0.9);
+  --table-border: rgba(0, 0, 0, 0.12);
+  --blockquote-bg: rgba(240, 242, 245, 0.7);
+  --blockquote-border: rgba(108, 92, 231, 0.5);
+  --menu-bg: rgba(255, 255, 255, 0.98);
+  --menu-border: rgba(0, 0, 0, 0.12);
+  --menu-item-hover: rgba(0, 0, 0, 0.06);
+  --tooltip-bg: rgba(255, 255, 255, 0.95);
+  --tooltip-border: rgba(0, 0, 0, 0.12);
+  --input-bg: var(--bg-secondary);
+  --shadow-color: rgba(0, 0, 0, 0.12);
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --overlay-bg: rgba(0, 0, 0, 0.5);
 }
 
 *,
